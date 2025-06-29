@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sinh nhật Ín Nhy cute</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Indie+Flower&family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+    <link rel="icon" type="image/png" href="cat2.png" />
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: white;
+      }
+
+      .heart {
+        position: absolute;
+        color: red;
+        font-size: 1.5rem;
+        pointer-events: none;
+        will-change: transform, opacity;
+      }
+
+      .floating-heart {
+        position: absolute;
+        font-size: 1.5rem;
+        color: #ff4d6d;
+        pointer-events: none;
+        animation: floatUp 5s linear infinite;
+      }
+
+      .envelope-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 900px;
+        height: auto;
+        cursor: pointer;
+        z-index: 10;
+        animation: shake 2s infinite;
+      }
+
+      .envelope {
+        position: relative;
+        width: 100%;
+        height: 650px;
+        background: #fff3f8;
+        border: 4px solid #ff8fa3;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(255, 100, 150, 0.3);
+        overflow: hidden;
+      }
+
+      .flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: #ffe5ec;
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        z-index: 2;
+        transform-origin: top center;
+      }
+
+      .arrow {
+        position: absolute;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+        animation: bounce 1s infinite;
+      }
+
+      .arrow img {
+        margin-right: 2vh;
+        margin-top: 30vh;
+        width: 180px;
+        height: auto;
+        transform: translateY(0);
+      }
+
+      .letter-paper {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        padding: 8px;
+        box-sizing: border-box;
+        border-radius: 16px;
+        z-index: 1;
+        text-align: left;
+        font-size: 18px;
+        color: #333;
+        line-height: 1.7;
+        white-space: pre-line;
+        overflow-y: auto;
+      }
+
+      .cat-inside-letter {
+        width: 100px;
+        margin: 0 auto;
+        display: block;
+        transform: translateY(100%);
+      }
+
+      audio {
+  pointer-events: none;     /* Ngăn người dùng thao tác */
+  opacity: 1;               /* Vẫn hiển thị bình thường */
+  width: 300px;             /* Tuỳ chọn: điều chỉnh kích thước */
+}
+
+      @keyframes shake {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        25% {
+          transform: translate(-50%, -50%) rotate(1deg);
+        }
+        50% {
+          transform: translate(-50%, -50%) rotate(-1deg);
+        }
+        75% {
+          transform: translate(-50%, -50%) rotate(1deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-10px);
+        }
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) scale(1.5);
+          opacity: 0;
+        }
+      }
+      #fireworksCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .nyan-cat {
+        position: fixed;
+        bottom: 100px; /* Điều chỉnh vị trí cao thấp */
+        left: -200px;
+        width: 150px;
+        z-index: 99;
+        animation: flyAcross 10s linear infinite alternate;
+      }
+
+      @keyframes flyAcross {
+        0% {
+          left: -200px;
+          transform: scaleX(1); /* hướng sang phải */
+        }
+        50% {
+          transform: scaleX(1);
+        }
+        51% {
+          transform: scaleX(-1); /* lật lại bay sang trái */
+        }
+        100% {
+          left: 100vw;
+          transform: scaleX(-1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="fireworksCanvas"></canvas>
+    <!-- Âm thanh nền -->
+    <!-- <audio id="bgMusic" autoplay muted loop>
+      <source src="cmsn.mp3" type="audio/mp4" />
+      Trình duyệt của bạn không hỗ trợ phát âm thanh.
+    </audio> -->
+
+    <div style="height: 10vh;margin-top: 300px;" class="d-flex justify-content-between mx-5">
+      <img src="Assets/happycat.gif" alt="Nyan Cat" style="height: 200px; width: auto" />
+      <img src="Assets/dancecat.gif" alt="Nyan Cat" style="height: 200px; width: auto" />
+    </div>
+      
+    </div>
+    <!-- Phong bì -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+      <div class="arrow">
+        <img src="Assets/cat3.png" alt="Cat arrow" />
+      </div>
+      <div class="envelope" id="envelope">
+        <div class="flap" id="flap"></div>
+        <div class="letter-paper" style="line-height: 20px" id="letterPaper">
+          <img
+            class="cat-inside-letter"
+            id="catImage"
+            src="Assets/catwhite.gif"
+            alt="Cat inside"
+            style="height: 120px; width: auto"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="nyan-cat" style="height: 10vh">
+      <img src="Assets/ranbowcat.gif" alt="Nyan Cat" style="height: 100px" />
+      <audio id="bgMusic" autoplay muted loop controls>
+        <source src="Assets/meomoe.mp3" type="audio/mp4" />
+        Trình duyệt không hỗ trợ âm thanh.
+      </audio>
+    </div>
+
+    <script>
+      gsap.to("body", {
+        duration: 2,
+        backgroundColor: "#ffe6f0",
+      });
+
+      document.addEventListener("click", function (e) {
+        const heartCount = 10;
+        const radius = 80;
+
+        for (let i = 0; i < heartCount; i++) {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.innerHTML = "💖";
+          document.body.appendChild(heart);
+
+          heart.style.left = e.clientX + "px";
+          heart.style.top = e.clientY + "px";
+
+          const angle = Math.random() * Math.PI * 2;
+          const distance = Math.random() * radius;
+
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+
+          gsap.fromTo(
+            heart,
+            { x: 0, y: 0, opacity: 1, scale: 1 },
+            {
+              x: x,
+              y: y,
+              opacity: 0,
+              scale: 1.5,
+              duration: 1,
+              ease: "power2.out",
+              onComplete: () => heart.remove(),
+            }
+          );
+        }
+      });
+
+      function createFloatingHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("floating-heart");
+        heart.innerHTML = "😽";
+        const size = Math.random() * 20 + 10;
+        heart.style.fontSize = size + "px";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.bottom = "-20px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+
+      setInterval(createFloatingHeart, 200);
+
+      const wrapper = document.getElementById("envelopeWrapper");
+      const letter = document.getElementById("letterPaper");
+      const arrow = document.querySelector(".arrow");
+      const flap = document.getElementById("flap");
+      const catImage = document.getElementById("catImage");
+      const bgMusic = document.getElementById("bgMusic");
+
+      const message = `
+Xin chào bé Nhy nhỏ nhỏ cụa toi 💌
+
+Hôm nay là ngày đặc biệt của bé Nhy nhỉ? hẹ hẹ hẹ
+
+Anh chúc bé Nhy có một ngày sinh nhật tuyệt vời vui vẻ, thật nhiều niềm vui. Chúc nhỏ nhỏ của anh luôn xinh đẹp, học giỏi ra trường với bằng xuất sắc. Chúc nhỏ nhỏ luôn tươi cười dạng dỡ bớt suy nghĩ nhiều lung tung rồi khóc một mình. Chúc nhỏ nhỏ tuổi mới mọi mong muốn sẽ thành hiện thực. Chúc mừng sinh nhật emmm 🎉🎉🎉. Yêu yêu nhỏ nhỏ lémmmmm
+
+Đây là món quà nhỏ anh dành tặng em Nhy tuy chưa được chỉn chu lắm nhưng mong em Nhy sẽ đón nhận tình cạm to đùng nài ❤️❤️❤️
+
+Iu iu nhỏ nhỏ ôm ôm chụt chụt,
+Ký tên: Beo Beo 🐱
+      `;
+
+      let opened = false;
+
+      wrapper.addEventListener("click", () => {
+        if (opened) return;
+        opened = true;
+        wrapper.style.animation = "none";
+        arrow.style.display = "none";
+
+        // Phát nhạc sau tương tác
+        bgMusic.muted = false;
+        bgMusic.play().catch((e) => console.warn("Không thể phát nhạc:", e));
+
+        gsap.to(flap, {
+          rotateX: -120,
+          duration: 0.8,
+          ease: "power2.inOut",
+        });
+
+        gsap.to(letter, {
+          top: "0%",
+          duration: 1.2,
+          delay: 0.5,
+          ease: "power3.out",
+          onStart: () => {
+            gsap.to(catImage, {
+              y: 0,
+              duration: 1,
+              ease: "back.out(1.7)",
+              delay: 0.8,
+            });
+          },
+          onComplete: () => typeMessage(message, letter),
+        });
+      });
+
+      function typeMessage(text, container) {
+        let index = 0;
+        function type() {
+          if (index < text.length) {
+            container.append(text.charAt(index));
+            index++;
+            setTimeout(type, 25);
+          }
+        }
+        type();
+      }
+
+      // Firework Effect
+      const canvas = document.getElementById("fireworksCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function createFirework(x, y) {
+        const colors = ["#ff4d6d", "#ffc107", "#17c3b2", "#fd5f00", "#d63384"];
+        const count = 30;
+
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: x,
+            y: y,
+            angle: Math.random() * 2 * Math.PI,
+            speed: Math.random() * 5 + 2,
+            radius: Math.random() * 2 + 1,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 100,
+          });
+        }
+      }
+
+      function updateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+          const dx = Math.cos(p.angle) * p.speed;
+          const dy = Math.sin(p.angle) * p.speed;
+          p.x += dx;
+          p.y += dy;
+          p.life--;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+
+          if (p.life <= 0) {
+            particles.splice(i, 1);
+          }
+        });
+      }
+
+      function loopFireworks() {
+        updateParticles();
+        requestAnimationFrame(loopFireworks);
+      }
+
+      loopFireworks();
+
+      // Tự động tạo pháo hoa ngẫu nhiên
+      setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height * 0.7; // Không quá thấp
+        createFirework(x, y);
+      }, 500);
+    </script>
+  </body>
+</html>
